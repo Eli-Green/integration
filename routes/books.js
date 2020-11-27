@@ -42,10 +42,10 @@ router.post('/', (request, response, next) => {
 });
 
 router.get('/', (request, response, next) => {
-    let name = request.query['name'];
-    if (name){
+    let author = request.query['author'];  //searches using author as search variable
+    if (author){
         BookSchema
-            .find({"isbn": name})
+            .find({"author": author})
             .exec( (error, books) => {
                 if (error){
                     response.send({"error": error});
@@ -53,29 +53,35 @@ router.get('/', (request, response, next) => {
                     response.send(books);
                 }
             });
-    }else{
+    }else{  //returns all books
         BookSchema
-            .find()
+            .find()  //finds all books
             .exec( (error, books) => {
                 if (error){
-                    response.send({"error": error});
+                    response.send({"error": error}); //return error message in the case of an error
                 }else{
-                    response.send(books);
+                    response.send(books);  //otherwise output all books
                 }
             });
     }
-    // FriendSchema
-    //     .find()
-    //     .exec( (error, friends) => {
-    //         if (error){
-    //             response.send({"error": error});
-    //         }else{
-    //             response.send(friends);
-    //         }
-    //     });
 } );
 
-router.get('/:id', (request, response, next) =>{
+router.get('/:isbn', (request, response, next) =>{
+    BookSchema
+        .findOne({"isbn": request.params.isbn}, (error, result) =>{
+            if (error) {
+                response.status(500).send(error);
+            }
+            if (result){
+                response.send(result);
+            }else{
+                response.status(404).send({"isbn": request.params.id, "error":  "Not Found"});
+            }
+
+        });
+});
+
+/*router.get('/:id', (request, response, next) =>{
     BookSchema
         .findOne({"_id": request.params.id}, (error, result) =>{
             if (error) {
@@ -88,7 +94,9 @@ router.get('/:id', (request, response, next) =>{
             }
 
         });
-});
+});*/
+
+
 
 router.patch('/:id', (request, response, next) =>{
     BookSchema
