@@ -22,7 +22,7 @@ function HandleError(response, reason, message, code){
 router.post('/', (request, response, next) => {
     let newBook = request.body;
     //console.log(request.body);
-    if (!newBook.name || !newBook.author || !newBook.isbn){
+    if (!newBook.name || !newBook.author || !newBook.isbn || !newBook.price){
         HandleError(response, 'Missing Info', 'Form data missing', 500);
     }else{
         let book = new BookSchema({
