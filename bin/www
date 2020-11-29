@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+//running at https://secure-eyrie-76929.herokuapp.com/
 
 /**
  * Module dependencies.
